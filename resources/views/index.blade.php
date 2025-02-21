@@ -11,7 +11,7 @@
                 <div class="container mx-auto p-6">
                     <h1 class="text-2xl font-bold">Welcome to Queuing System</h1>
                     <p>Please Input your name.</p>
-                    <form id="clientForm">
+                    <form id="clientForm" data-url="{{route('get.store.name')}}">
                         @csrf
                         <div class="mb-3">
                             <label for="name">Name:</label>
@@ -43,92 +43,5 @@
         </div>
         </div>
     </div>
-    @section('scripts')
-        <script>
-            $(document).ready(function(){
-                //add csrf token to all the request
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                //get client Queue Data
-                $('#clientForm').on('submit', function(e){
-                    e.preventDefault();
-                    let name = $(`#name`).val();
-                    const url = "{{route('get.store.name')}}"   
-                    $.ajax({
-                        url: url,
-                        method: 'POST',
-                        data:{
-                            name: name,
-                        },
-                        success: function(data){
-                            $('.modal-body').append(`
-                            <p class="text-center text-medium">${data.transactionNumber} </p> 
-                            <p class="text-secondary text-center">${data.name} </p>`);
-                            $('#transactionData').modal('show');
-                            $('.errors').html('');
-                            $('.inputs').val('');
-                        },
-                        error: function(xhr, status, error){
-                            console.log("Error Details: " + status + error + xhr.responseText);
-                           
-                            //display errors
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                let errorMessages = '';
-
-                                for (let field in errors) {
-                                    $('#' + field + '-error').html(errors[field].join('<br>'));
-                                }
-                            } else {
-                                $('.errors').text('Something went wrong. Please try again later.');
-                            }
-                        }
-                    })
-                });
-
-                $(`#printBtn`).click(function(){
-                    var content = $(`#printClientQueue`).html();
-                    
-                    var printWindow = window.open("", "", "width=816,height=1056");
-
-                    var styles = `
-                        <style>
-                            @page {
-                            size: 5.5in 8.5in landscape; 
-                                margin: 0;
-                            }
-                            body {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                flex-direction:column;
-                                text-align: center;
-                                font-family: Arial, sans-serif;
-                                height:90vh;
-                            }
-                            .print-container {
-                                flex-direction:column;
-                                font-size:50px;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            }
-                        </style>
-                    `;
-
-                    printWindow.document.head.innerHTML = styles;
-                    printWindow.document.body.innerHTML = `<div class="print-container">${content}</div>`;
-
-                    printWindow.print();
-                    printWindow.close();
-                });
-
-               
-            })
-        </script>
-    @endsection
 </x-app-layout>
 

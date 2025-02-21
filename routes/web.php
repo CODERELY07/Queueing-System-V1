@@ -1,29 +1,26 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\QueueTransactionController;
+
 use Illuminate\Support\Facades\Route;
 
+// Home
 Route::get('/', function () {
-    return view('welcome');
+    if(auth()->check()){
+        if(auth()->user()->role == 'admin'){
+            return redirect(route('admin.index'));
+        }
+        return redirect(route('cashier.index'));
+       
+    }
+    return view('auth.login');
 });
 
+Route::get('/unauthorized', function () {
+    return view('errors.unauthorized'); // create a corresponding view
+})->name('unauthorized');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-Route::middleware('guest')->group(function(){
-    Route::controller(QueueTransactionController::class)->group(function(){
-        Route::get('/c/name', 'showQueue')->name('get.client.name');
-        Route::post('/c/name', 'storeQueueNumber')->name('get.store.name');
-    });
-});
 
 require __DIR__.'/auth.php';
+
+
+

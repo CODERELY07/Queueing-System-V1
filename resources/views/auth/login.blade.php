@@ -9,17 +9,17 @@
             <div class="alert"></div>
             <div class="mb-3">
               <label for="name" class="form-label">Name</label>
-              <input type="name" class="form-control" id="name" name="name">
+              <input type="name" class="form-control inputs" id="name" name="name">
               <div class="errors" id="name-error"></div>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" name="password">
+              <input type="password" class="form-control inputs" id="password" name="password">
               <div class="errors" id="password-error"></div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
             <br><br>
-            <a href="{{route('get.client.name')}}">Home</a> | <a href="#">Cashier</a>
+            <a href="{{route('get.client.name')}}">Home</a>
           </form>
     </div>
 </x-app-layout>

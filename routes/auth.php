@@ -24,27 +24,33 @@ Route::middleware('guest')->group(function() {
 
 // Routes for logged-in users (authenticated)
 Route::middleware('auth')->group(function() {
-
-    // Admin Routes
-    // Route::prefix('admin')->controller(AdminController::class)->group(function(){
-    //     Route::get('/', 'index')->name('admin.index');  
-    // });
-
     // Logout Route
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-
+// admin
 Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+
+    // Admin CashierListCrud
+    // view cashier
+    Route::get('/admin/cashier-list-view', function () {
+        return view('admin.cashier-list'); 
+    })->name('admin.cashierList');
+    // fetch cashierList
+    Route::get('/admin/cashier-list', [AdminController::class, 'cashierList']);
+    //create new cashier
+    Route::post('/admin/cashier-list', [AdminController::class, 'store']);
+    //Updaate cashier
+    Route::put('/admin/cashier-list/{id}', [AdminController::class, 'update']);
+    // Delete cashierList
+    Route::delete('/admin/cashier-list/{id}', [AdminController::class, 'destroy']);
+    //show edit cashier
+    Route::get('/admin/cashier-list/{id}', [AdminController::class, 'show']);
+
 });
 
+//cashier
 Route::middleware(['auth', 'role:cashier'])->group(function(){
     Route::get('/cashier', [CashierController::class, 'index'])->name('cashier.index');
 });
-
-
-// Public route for the admin index page 
-// Route::get('/admin', function () {
-//     return view('admin.index');
-// })->middleware(['auth', 'verified'])->name('admin.index');

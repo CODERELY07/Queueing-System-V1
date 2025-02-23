@@ -1,0 +1,7 @@
+When first time or reset the migration
+php artisan migrate
+php artisan db:seed --class=AdminSeeder
+
+When setup is complete
+php artisan serve
+

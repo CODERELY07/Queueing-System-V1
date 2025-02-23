@@ -1,5 +1,27 @@
-$(document).ready(function(){
+// Display and debug error function
+function errorHandler(xhr, status, error){
+    $('.errors').html('');
+    console.log("Error Details: " + status + error + xhr.responseText);
+            
+    // Display errors
+    if (xhr.status === 422) {
+        let errors = xhr.responseJSON.errors;
+        for (let field in errors) {
+            $('#' + field + '-error').html(errors[field].join('<br>'));
+        }
+    } else {
+        $('.errors').text('Something went wrong. Please try again later.');
+    }
+}
 
+// Remove displayed errors
+function errorClean(){
+    $('.errors').html('');
+    $('.alert').removeClass('alert-danger').text('');
+    $('.inputs').val('');
+}
+
+$(document).ready(function(){
       // Print Client Queue
       $(`#printBtn`).click(function(){
         var content = $(`#printClientQueue`).html();
@@ -32,5 +54,13 @@ $(document).ready(function(){
 
         printWindow.print();
         printWindow.close();
+    });
+
+    // Show modal that is not related to post-request
+    $(document).on('click',".show-modal", function(){
+        const target = $(this).data('target');
+        $("#cashierForm")[0].reset();
+        $("#cashier_id").val('');
+       $(target).modal('show');
     });
 })

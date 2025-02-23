@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/unauthorized', function () {
-    return view('errors.unauthorized'); // create a corresponding view
+    return view('errors.unauthorized'); 
 })->name('unauthorized');
 
 

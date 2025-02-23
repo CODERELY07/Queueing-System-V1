@@ -1,0 +1,12 @@
+The view is located in views/admin/cashier-list.blade.php.
+The database migration corresponds to the users table.
+
+How to View the Code:
+Open cashier-list.blade.php to see the view.
+In post-request.js, find the function loadCashier, which is responsible for fetching or loading the data.
+In auth.blade.php, locate //admin, then // Admin CashierListCrud to see the cashier list CRUD functionality.
+Open AdminController.php and find the cashierList method, which handles fetching the cashier list.
+
+The Create, Delete, and Edit functionalities can also be found in the files mentioned above—just look for the corresponding comments that are related to these functionalities.
+
+Check the other function that use in post-request.js in the util.js

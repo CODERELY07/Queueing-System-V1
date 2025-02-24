@@ -62,6 +62,33 @@ $(document).ready(function(){
         });
     });
 
+    // Listens for 'CashierLogStatus' on 'cashier-status' channel and updates cashier data in real-time.
+    if(window.Echo){
+        // console.log("Echo is initialized...");
+        window.Echo.channel('cashier-status')
+    .listen('CashierLogStatus', function(data) { 
+        console.log('Received event:', data);
+        loadCashier();
+    });
+    } else {
+        console.error("Echo is not available!");
+    }
+    
+    //logout also trigger the cashierLogStatus event
+    $('#logout').on('click', function(){
+        const url = $(this).data('url');
+        $.ajax({
+            url: url,
+            method: 'POST',
+            success: function(data){
+                window.location.href = data.redirectUrl;
+            },
+            error: function(xhr, status, error){
+                console.error('Logout error:', error);
+            }
+        });
+    });
+    
     //create and update cashier List
     $("#cashierForm").submit(function(e){
         e.preventDefault();

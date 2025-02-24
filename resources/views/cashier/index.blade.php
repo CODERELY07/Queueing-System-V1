@@ -4,7 +4,7 @@
             {{ __('Cashier') }}
         </h2>
     
-        <a href="{{route('logout')}}"><button>Logout</button></a>
+        <button id="logout" data-url="{{route('logout')}}">Logout</button>    
     </x-slot>
 
     <div class="py-12">

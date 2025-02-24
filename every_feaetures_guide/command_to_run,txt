@@ -3,5 +3,8 @@ php artisan migrate
 php artisan db:seed --class=AdminSeeder
 
 When setup is complete
+php artisan queue:listen
+php artisan reverb:start --debug
+npm run dev
 php artisan serve
 

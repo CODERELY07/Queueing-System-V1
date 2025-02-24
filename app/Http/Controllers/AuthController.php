@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CashierLogStatus;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
 use Session;
@@ -13,6 +15,8 @@ class AuthController extends Controller
         return view('auth.login');
     }
     public function loginPost(Request $request){
+    
+
         $request->validate([
             'name' => 'required|string',
             'password' => 'required'
@@ -21,6 +25,10 @@ class AuthController extends Controller
         $credentials = $request->only('name', 'password');
         if(Auth::attempt($credentials)){
             $user = Auth::user();
+
+            // CashierLogStatus Event To update status
+            $user->update(['log_status' => 'logged_in']);
+            event(new CashierLogStatus($user));
 
             $request->session()->regenerate();
 
@@ -38,9 +46,16 @@ class AuthController extends Controller
         return response()->json(['error' => 'Invalid Credentials']);
     }
     public function logout(){
+        // CashierLogStatus Event To update status
+        $user = Auth::user();
+        event(new CashierLogStatus($user));
+        if($user){
+            $user->update(['log_status' => 'logged_out']);
+        }
+        
         Session::flush();
         Auth::logout();
 
-        return redirect(route('login'));
+        return response()->json(['redirectUrl' => route('login')]);
     }
 }

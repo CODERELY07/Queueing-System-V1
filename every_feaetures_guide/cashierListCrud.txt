@@ -1,6 +1,8 @@
 The view is located in views/admin/cashier-list.blade.php.
 The database migration corresponds to the users table.
 
+#CRUD
+
 How to View the Code:
 Open cashier-list.blade.php to see the view.
 In post-request.js, find the function loadCashier, which is responsible for fetching or loading the data.
@@ -10,3 +12,13 @@ Open AdminController.php and find the cashierList method, which handles fetching
 The Create, Delete, and Edit functionalities can also be found in the files mentioned above—just look for the corresponding comments that are related to these functionalities.
 
 Check the other function that use in post-request.js in the util.js
+
+
+#Log Status Logged_in and Logged Out when cashier is Logged
+
+php artisan make:event CashierLogStatus 
+app/Events/CashierLogStatus - event that sends cashier status updates in real time
+app/Http/Controllers/AuthController - check this comment // CashierLogStatus Event To update status - This will update or broadcast the cashier status over the  channel cashier-status
+which is in the public/js/post-request.js to find it find this (CashierLogStatus)
+In routes/web find for this comment - (CashierListEvent) 
+I also put this @vite('resources/js/app.js') in views/layouts/app.blade.php

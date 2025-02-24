@@ -18,7 +18,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:users,name',
             'password' => 'required|min:6',
         ]);
 
@@ -40,7 +40,7 @@ class AdminController extends Controller
     {
         // Validate input
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:users,name',
             'password' => 'nullable|min:6'
         ]);
     

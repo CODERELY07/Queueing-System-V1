@@ -18,14 +18,15 @@ Route::middleware('guest')->group(function() {
     // Authentication Routes 
     Route::prefix('auth')->controller(AuthController::class)->group(function(){
         Route::get('/login', 'login')->name('login');
+        // CashierListEvent
         Route::post('/login', 'loginPost')->name('login.post');
     });
 });
 
 // Routes for logged-in users (authenticated)
 Route::middleware('auth')->group(function() {
-    // Logout Route
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Logout Route/CashierListEvent
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 // admin

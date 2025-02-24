@@ -1,3 +1,4 @@
+@vite('resources/js/app.js')
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -38,6 +39,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
         <script src="{{ asset('js/util.js') }}"></script>
         <script src="{{ asset('js/post-request.js') }}"></script>
-        
+        @yield('script')
     </body>
 </html>

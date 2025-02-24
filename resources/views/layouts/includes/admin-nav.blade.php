@@ -5,4 +5,4 @@
         <li><a href="{{route('admin.cashierList')}}">Cashier List</a></li>
     </ul>
 </nav>
-<a href="{{route('logout')}}"><button>Logout</button></a>
+<button id="logout" data-url="{{route('logout')}}">Logout</button>

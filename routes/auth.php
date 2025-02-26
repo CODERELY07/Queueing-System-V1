@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\CashierController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminCashierListController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QueueTransactionController;
 
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function() {
 
 // admin
 Route::middleware(['auth', 'role:admin'])->group(function(){
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin', [AdminCashierListController::class, 'index'])->name('admin.index');
 
     // Admin CashierListCrud
     // view cashier
@@ -39,15 +39,15 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
         return view('admin.cashier-list'); 
     })->name('admin.cashierList');
     // fetch cashierList
-    Route::get('/admin/cashier-list', [AdminController::class, 'cashierList']);
+    Route::get('/admin/cashier-list', [AdminCashierListController::class, 'cashierList']);
     //create new cashier
-    Route::post('/admin/cashier-list', [AdminController::class, 'store']);
+    Route::post('/admin/cashier-list', [AdminCashierListController::class, 'store']);
     //Updaate cashier
-    Route::put('/admin/cashier-list/{id}', [AdminController::class, 'update']);
+    Route::put('/admin/cashier-list/{id}', [AdminCashierListController::class, 'update']);
     // Delete cashierList
-    Route::delete('/admin/cashier-list/{id}', [AdminController::class, 'destroy']);
+    Route::delete('/admin/cashier-list/{id}', [AdminCashierListController::class, 'destroy']);
     //show edit cashier
-    Route::get('/admin/cashier-list/{id}', [AdminController::class, 'show']);
+    Route::get('/admin/cashier-list/{id}', [AdminCashierListController::class, 'show']);
 
 });
 

@@ -33,17 +33,17 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="cashierModal">Cashier</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                   <form id="cashierForm">
                     <input type="hidden" id="cashier_id">
                     <div class="mb-3">
                         <label for="name">Cashier Name</label>
-                        <input type="text" id="name" class="form-control">
+                        <input type="text" id="name" class="form-control inputs">
                         <div class="errors" id="name-error"></div>
                         <label for="name">Password </label>
-                        <input type="password" id="password" class="form-control">
+                        <input type="password" id="password" class="form-control inputs">
                         <div class="errors" id="password-error"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -54,10 +54,6 @@
         </div>
     </div>
     @section('script')
-
-    <script>
-      console.log('test')
-    </script>
     @endsection
 </x-app-layout>
 

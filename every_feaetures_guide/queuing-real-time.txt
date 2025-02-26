@@ -1,0 +1,16 @@
+#queue real time monitoring
+
+app/Events/Queueing 
+app/Http/Controller/QueueingController.php
+public/js/queuing.js
+Views
+view/cashier/index.blade.php
+view/queuing/queuing.php
+view/queuing/monitoring.php
+
+#Create a Global Function to use in All Controller Using Global Helper Function
+Create a folder and file 
+app/Helpers/validation.php
+in the composer.json find "autoload" and you can see "files" which is the helpers/validation.php to be use globally
+use this command below to reload the composer.json
+composer dump-autoload

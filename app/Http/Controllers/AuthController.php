@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
+use Log;
 use Session;
 
 class AuthController extends Controller
@@ -14,6 +15,7 @@ class AuthController extends Controller
     public function login(){
         return view('auth.login');
     }
+
     public function loginPost(Request $request){
     
 
@@ -23,25 +25,34 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('name', 'password');
-        if(Auth::attempt($credentials)){
-            $user = Auth::user();
+        $user = User::where('name', $request->name)->first();
+        // Debugging to view this go to storage/logs/laravel.log
+        // Log::debug('Logged-in user details: ', ['user' => $user]);
 
-            // CashierLogStatus Event To update status
-            $user->update(['log_status' => 'logged_in']);
-            event(new CashierLogStatus($user));
-
-            $request->session()->regenerate();
-
-            $user = Auth::user();
+        //check if user is logged in 
+        if($user->log_status == 'logged_out'){
+            if(Auth::attempt($credentials)){
+                $user = Auth::user();
+            
+                // CashierLogStatus Event To update status and update last_login
+                $user->update(['log_status' => 'logged_in', 'last_login' => now()]);
+                event(new CashierLogStatus($user));
+                
+                $request->session()->regenerate();
     
-            if ($user->role === 'admin') {
-                $redirectUrl = route('admin.index');
-            } elseif ($user->role === 'cashier') {
-                $redirectUrl = route('cashier.index');
-            } else {
-                $redirectUrl = route('login');
+                $user = Auth::user();
+        
+                if ($user->role === 'admin') {
+                    $redirectUrl = route('admin.index');
+                } elseif ($user->role === 'cashier') {
+                    $redirectUrl = route('cashier.index');
+                } else {
+                    $redirectUrl = route('login');
+                }
+                return response()->json(['success' => 'Login Successfully', 'redirectUrl' => $redirectUrl]);
             }
-            return response()->json(['success' => 'Login Successfully', 'redirectUrl' => $redirectUrl]);
+        }else{
+            return response()->json(['error' => 'User is currently Logged in other device.']);
         }
         return response()->json(['error' => 'Invalid Credentials']);
     }

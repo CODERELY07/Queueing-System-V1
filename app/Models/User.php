@@ -22,7 +22,8 @@ class User extends Authenticatable
         'password',
         'role',
         'log_status', 
-        'status'      
+        'status',
+        'last_login'
     ];
     
 

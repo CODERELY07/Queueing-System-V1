@@ -7,12 +7,20 @@
         <button id="logout" data-url="{{route('logout')}}">Logout</button>    
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
+    <div class="py-4">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Now Servicing</div>
+                    <div class="card-body" id="cashier-queue-{{auth()->user()->id}}">
+                        -- --
+                    </div>
+               </div>
+            </div>
+            <div class="col-6">
+                <input type="hidden" name="client_id">
+                <button id="nextQueue" data-url="{{route('queue.fire')}}" data-cashier_id="{{auth()->user()->id}}">Next</button>
+                <button id="notifyQueue" data-url="{{route('queue.fire.notification')}}" data-cashier_id="{{auth()->user()->id}}">Notify</button>
             </div>
         </div>
     </div>

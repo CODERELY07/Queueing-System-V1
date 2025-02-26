@@ -22,3 +22,17 @@ app/Http/Controllers/AuthController - check this comment // CashierLogStatus Eve
 which is in the public/js/post-request.js to find it find this (CashierLogStatus)
 In routes/web find for this comment - (CashierListEvent) 
 I also put this @vite('resources/js/app.js') in views/layouts/app.blade.php
+
+I also added in AuthController when use is logged in the other device it will not logged in
+
+# User Status automatically Change 
+Add column to users table 
+command:
+php artisan make:migration add_last_login_to_users_table --table=users
+php artisan migrate
+In AuthController I update last_login in loginPost function
+
+In this we wil use Task Scheduling
+Go to routes/console.php find the Schedule 
+run this to work
+php artisan schedule:work

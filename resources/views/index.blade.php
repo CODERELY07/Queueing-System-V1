@@ -12,10 +12,9 @@
                     <h1 class="text-2xl font-bold">Welcome to Queuing System</h1>
                     <p>Please Input your name.</p>
                     <form id="clientForm" data-url="{{route('get.store.name')}}">
-                        @csrf
                         <div class="mb-3">
                             <label for="name">Name:</label>
-                            <input type="text" class="inputs form-control" name="name" id="name">
+                            <input type="text" class="form-control" id="name">
                             <div id="name-error" class="errors"></div>
                         </div>
                         <div class="mb-3">
@@ -43,5 +42,7 @@
         </div>
         </div>
     </div>
+
+
 </x-app-layout>
 

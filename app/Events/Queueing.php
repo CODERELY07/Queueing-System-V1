@@ -17,9 +17,10 @@ class Queueing implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public $client;
+    public function __construct($client)
     {
-        
+        $this->client = $client; 
     }
 
     /**
@@ -30,7 +31,15 @@ class Queueing implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('queuing-monitoring'),
+        ];
+    }
+
+    public function broadcastWith(){
+        return [
+            'id' => $this->client->id,
+            'name' => $this->client->name,
+            'cashier_id' => $this->client->cashier_id
         ];
     }
 }

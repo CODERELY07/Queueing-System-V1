@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
-class AdminController extends Controller
+class AdminCashierListController extends Controller
 {
     // admin home
     public function index(){
@@ -17,10 +18,17 @@ class AdminController extends Controller
     //creaete Cashier 
     public function store(Request $request)
     {
-        $request->validate([
+         $validator = Validator::make($request->all(),[
             'name' => 'required|unique:users,name',
             'password' => 'required|min:6',
         ]);
+
+        $response = failsReponse200($validator);
+        
+        if($response){
+            return $response;
+        }
+          
 
         $hashed = Hash::make($request->password);
 
@@ -38,12 +46,16 @@ class AdminController extends Controller
     //update cashier
     public function update(Request $request, $id)
     {
-        // Validate input
-        $request->validate([
-            'name' => 'required|unique:users,name',
-            'password' => 'nullable|min:6'
+
+         $validator = Validator::make($request->all(),[
+            'name' => 'required|unique:users,name,' .$id,
+            'password' => 'nullable|min:6',
         ]);
-    
+
+        $response = failsReponse200($validator);
+        if($response){
+            return $response;
+        }
         $cashier = User::findOrFail($id);
     
         $updateData = [

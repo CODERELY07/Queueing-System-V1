@@ -8,33 +8,42 @@ $(document).ready(function(){
         }
     });
 
-    // Client Queue form submission
-    $('#clientForm').on('submit', function(e){
+    if(window.location.pathname == "/queue/client"){
+        $('#clientForm').on('submit', function(e){
         
-        e.preventDefault();
-        errorClean();
-        let name = $('#name').val();
-        const url = $(this).data('url');   
-        $.ajax({
-            url: url,
-            method: 'POST',
-            data:{
-                name: name,
-            },
-            success: function(data){
-                $('.modal-body').append(`
-                    <p class="text-center text-medium">${data.transactionNumber}</p>
-                    <p class="text-secondary text-center">${data.name}</p>
-                `);
-                $('#transactionData').modal('show');
-                errorClean();
-            },
-            error: function(xhr, status, error){
-                errorHandler(xhr, status, error);
-            }
+            e.preventDefault();
+            errorClean();
+            let name = $(`#name`).val();
+          
+            const url = $(this).data('url');   
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data:{
+                    name: name,
+                },
+                success: function(data){
+                    $('.modal-body').html('');
+                    if(data.name && data.transactionNumber){
+                        $('.modal-body').append(`
+                            <p class="text-center text-medium">${data.transactionNumber}</p>
+                            <p class="text-secondary text-center">${data.name}</p>
+                        `);
+                        $(`#name`).val('');
+                        
+                        $('#transactionData').modal('show');
+                    }
+                  
+                    displayError(data);
+                },
+                error: function(xhr, status, error){
+                    errorHandler(xhr, status, error);
+                }
+            });
         });
-    });
-
+    
+    }
+  
     // Login form submission
     $('#loginForm').on('submit', function(e){
         e.preventDefault();
@@ -62,7 +71,8 @@ $(document).ready(function(){
         });
     });
 
-    // Listens for 'CashierLogStatus' on 'cashier-status' channel and updates cashier data in real-time.
+    //queuing
+    // Listens for 'CashierLogStatus' on 'cashier-status' channel and updates cashier queue display data in real-time.
     if(window.Echo){
         // console.log("Echo is initialized...");
         window.Echo.channel('cashier-status')
@@ -89,10 +99,10 @@ $(document).ready(function(){
         });
     });
     
-    //create and update cashier List
+    //store and update cashier List
     $("#cashierForm").submit(function(e){
         e.preventDefault();
-        errorClean();
+      
         let id = $("#cashier_id").val();
         let url = id ? `/admin/cashier-list/${id}` : '/admin/cashier-list';
         let method = id ? 'PUT' : 'POST';
@@ -104,41 +114,40 @@ $(document).ready(function(){
                 name: $("#name").val(),
                 password: $("#password").val(),
             },
-            success: function(){
-                $("#cashierForm")[0].reset();
-                $("#cashier_id").val('');
-                errorClean();
+            success: function(response){
+                displayError(response);
                 loadCashier(); 
             },
             error: function(xhr, status, error){
-                errorHandler(xhr, status, error);
-                
+                errorHandler(xhr, status, error);                
             }
         });
     });
 
     // Function to load cashier list
     function loadCashier(){
-        $.get('/admin/cashier-list', function(cashiers){
-            let rows = '';
-            $.each(cashiers, function(index, cashier){
-                rows += `<tr>
-                    <td>${cashier.name}</td>
-                    <td>${cashier.log_status}</td>
-                    <td>${cashier.status}</td>
-                    <td>
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Action
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item edit" data-id="${cashier.id}">Edit</a></li>
-                            <li><a class="dropdown-item delete" data-id="${cashier.id}">Delete</a></li>
-                        </ul>
-                    </td>
-                </tr>`;
+        if(window.location.pathname == '/admin/cashier-list-view'){
+            $.get('/admin/cashier-list', function(cashiers){
+                let rows = '';
+                $.each(cashiers, function(index, cashier){
+                    rows += `<tr>
+                        <td>${cashier.name}</td>
+                        <td>${cashier.log_status}</td>
+                        <td>${cashier.status}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item edit" data-id="${cashier.id}">Edit</a></li>
+                                <li><a class="dropdown-item delete" data-id="${cashier.id}">Delete</a></li>
+                            </ul>
+                        </td>
+                    </tr>`;
+                });
+                $("#cashierTableList").html(rows);
             });
-            $("#cashierTableList").html(rows);
-        });
+        }
     }
 
     // Delete cashierList

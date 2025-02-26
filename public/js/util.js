@@ -1,24 +1,40 @@
 // Display and debug error function
 function errorHandler(xhr, status, error){
     $('.errors').html('');
+    //for testing 
     console.log("Error Details: " + status + error + xhr.responseText);
             
     // Display errors
     if (xhr.status === 422) {
         let errors = xhr.responseJSON.errors;
         for (let field in errors) {
-            $('#' + field + '-error').html(errors[field].join('<br>'));
+           console.log(errors[field]);
         }
     } else {
         $('.errors').text('Something went wrong. Please try again later.');
     }
 }
-
+function displayError(response){
+    // response = response.responseJSON.errors;
+    response = response.errors;
+    if(response){
+        errorClean();
+        for (let field in response) {
+            if(response[field] && response[field].length > 0)
+                $('#' + field + '-error').html(response[field].join('<br>'));
+        }
+    }else{
+        errorClean();
+        $('.inputs').val('');
+        
+    }
+  
+   
+}
 // Remove displayed errors
 function errorClean(){
     $('.errors').html('');
     $('.alert').removeClass('alert-danger').text('');
-    $('.inputs').val('');
 }
 
 $(document).ready(function(){
@@ -59,8 +75,11 @@ $(document).ready(function(){
     // Show modal that is not related to post-request
     $(document).on('click',".show-modal", function(){
         const target = $(this).data('target');
-        $("#cashierForm")[0].reset();
         $("#cashier_id").val('');
        $(target).modal('show');
+    });
+    $(document).on('click',".close-modal", function(){
+       errorClean();
+       $('.inputs').val('');
     });
 })

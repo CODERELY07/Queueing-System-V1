@@ -7,6 +7,9 @@ Views
 view/cashier/index.blade.php
 view/queuing/queuing.php
 view/queuing/monitoring.php
+migration for client
+2025_02_17_231150_create_clients_table.php
+
 
 #Create a Global Function to use in All Controller Using Global Helper Function
 Create a folder and file 

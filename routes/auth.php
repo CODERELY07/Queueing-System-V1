@@ -48,6 +48,8 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::delete('/admin/cashier-list/{id}', [AdminCashierListController::class, 'destroy']);
     //show edit cashier
     Route::get('/admin/cashier-list/{id}', [AdminCashierListController::class, 'show']);
+    //logout cashier from admin
+    Route::get('/admin/cashier-list-logout/{id}', [AdminCashierListController::class, 'logout']);
 
 });
 

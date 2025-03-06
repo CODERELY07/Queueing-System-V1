@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\Client;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -35,11 +37,15 @@ class Queueing implements ShouldBroadcast
         ];
     }
 
-    public function broadcastWith(){
+    public function broadcastWith()
+    {
+        $cashierName = User::where('id', $this->client->cashier_Id)->first()->name;
         return [
             'id' => $this->client->id,
             'name' => $this->client->name,
-            'cashier_id' => $this->client->cashier_id
+            'cashier_Id' => $this->client->cashier_Id,
+            'cashier_name' => $cashierName,  
         ];
     }
+    
 }

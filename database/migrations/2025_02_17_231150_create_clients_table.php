@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('cashier_Id')->nullable();;
             $table->string('name');
             $table->string('status')->default('waiting');
-            $table->string('cashier_id')->nullable();
+            $table->foreign('cashier_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      */

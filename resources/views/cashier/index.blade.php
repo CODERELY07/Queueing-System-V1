@@ -19,9 +19,22 @@
             </div>
             <div class="col-6">
                 <input type="hidden" name="client_id">
+                <button id="prevQueue" data-url="{{route('queue.firePrev')}}" data-cashier_id="{{auth()->user()->id}}">Prev</button>
                 <button id="nextQueue" data-url="{{route('queue.fire')}}" data-cashier_id="{{auth()->user()->id}}">Next</button>
                 <button id="notifyQueue" data-url="{{route('queue.fire.notification')}}" data-cashier_id="{{auth()->user()->id}}">Notify</button>
             </div>
         </div>
+        <div id="datetime"></div>
     </div>
+    @section('script')
+        <script>
+             function updateDateTime() {
+                const now = new Date();
+                const formattedDateTime = now.toLocaleString();
+                document.getElementById('datetime').innerText = formattedDateTime;
+            }
+            setInterval(updateDateTime, 1000);
+            updateDateTime();
+        </script>
+    @endsection
 </x-app-layout>

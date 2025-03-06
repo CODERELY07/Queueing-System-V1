@@ -1,6 +1,5 @@
 
 $(document).ready(function(){
-    // TODO:: Make this more short but readbable
     // Add CSRF token to all requests
     $.ajaxSetup({
         headers: {
@@ -141,6 +140,7 @@ $(document).ready(function(){
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item edit" data-id="${cashier.id}">Edit</a></li>
                                 <li><a class="dropdown-item delete" data-id="${cashier.id}">Delete</a></li>
+                                <li><a class="dropdown-item logout" data-id="${cashier.id}">Log Out</a></li>
                             </ul>
                         </td>
                     </tr>`;
@@ -177,5 +177,13 @@ $(document).ready(function(){
         });
     });
 
+    // TODO::Create logout cashier
+    // $(document).on('click', '.logout', function(){
+    //     let id = $(this).data('id');
+    //     $.get(`/admin/cashier-list-logout/${id}`, function(cashier){
+    //         loadCashier();
+    //     }); 
+
+    // })
     loadCashier();
 });

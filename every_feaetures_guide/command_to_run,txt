@@ -8,3 +8,9 @@ php artisan reverb:start --debug
 npm run dev
 php artisan serve
 php artisan schedule:work
+
+optional
+if migrate no run 
+php artisan migrate --seed
+if migrations are already done
+php artisan db:seed

@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\QueuingController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,9 +25,15 @@ Route::get('/unauthorized', function () {
 Route::controller(QueuingController::class)->group(function(){
     Route::get('/queuing', 'index')->name('queuing');
     Route::get('/queuing/monitoring', 'monitoring')->name('monitoring');
+    Route::get('/queuing/getQueuingMonitoring', 'getQueuingMonitoring');
     Route::post('/queing/fireQueue', 'fireNext')->name('queue.fire');
+    Route::post('/queing/firePrev', 'firePrev')->name('queue.firePrev');
     Route::post('/queing/fireNotification', 'fireNotification')->name('queue.fire.notification');
+
 });
+
+Route::get('/cashier/queuingList/{cashier_id}', [CashierController::class, 'getCashierQueuing']);
+
 
 require __DIR__.'/auth.php';
 

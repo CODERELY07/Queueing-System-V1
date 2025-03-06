@@ -4,12 +4,53 @@ $(document).ready(function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    
-    // Cashier Queue
-    $(document).on('click', '#nextQueue' , function(){
-        
-        const url = $(this).data('url');
 
+    // Speech Queue
+    let speechQueue = [];
+    let isSpeaking = false;
+
+    function speakText(text) {
+        return new Promise((resolve, reject) => {
+            if (!('speechSynthesis' in window)) {
+                reject('Speech synthesis not supported.');
+                return;
+            }
+
+            speechQueue.push({ text, resolve, reject });
+            processQueue(); 
+        });
+    }
+
+    function processQueue() {
+        if (isSpeaking || speechQueue.length === 0) return;
+
+        isSpeaking = true;
+        const { text, resolve, reject } = speechQueue.shift();
+        
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = "en-US";
+        msg.volume = 1;
+        msg.pitch = 1.5;
+        msg.rate = 1.5;
+
+        msg.onend = () => {
+            isSpeaking = false;
+            resolve();
+            processQueue(); 
+        };
+
+        msg.onerror = (event) => {
+            isSpeaking = false;
+            reject(`Speech error: ${event.error}`);
+            processQueue(); 
+        };
+
+        window.speechSynthesis.speak(msg);
+    }
+
+    // Cashier Queue
+    $(document).on('click', '#nextQueue', function(){
+        const url = $(this).data('url');
         const cashier_id = $(this).data('cashier_id');
 
         $.ajax({
@@ -17,26 +58,26 @@ $(document).ready(function(){
             method: 'POST',
             data: {cashier_id: cashier_id},
             success: function(response){
-                 console.log(response);
-                 if(response.message){
+                const client_id  = String(response.client.id);
+                const client_id_pad = client_id.padStart(4, "0");
+                console.log(response.client.cashier_id)
+                console.log(response);
+                if(response.message){
                     alert(response.message);
-                 }
+                }
 
                 $(`#cashier-queue-${cashier_id}`).html(
-                    `
-                    <div>ID: ${response.client.id}</div>
-                    <div>Name: ${response.client.name}</div>
-                    `
-                )
+                    `<div>ID: ${client_id_pad}</div>
+                     <div>Name: ${response.client.name}</div>`
+                );
             },
             error: function(xhr, status, error){
                 errorHandler(xhr, status, error);
             }
-        })
-    })
+        });
+    });
 
-    $(document).on('click', '#notifyQueue' , function(){
-        
+    $(document).on('click', '#prevQueue', function(){
         const url = $(this).data('url');
         const cashier_id = $(this).data('cashier_id');
 
@@ -45,47 +86,139 @@ $(document).ready(function(){
             method: 'POST',
             data: {cashier_id: cashier_id},
             success: function(response){
-                console.log(response);            },
+                const client_id  = String(response.client.id);
+                const client_id_pad = client_id.padStart(4, "0");
+    
+                $(`#cashier-queue-${cashier_id}`).html(
+                    `<div>ID: ${client_id_pad}</div>
+                     <div>Name: ${response.client.name}</div>`
+                );
+            },
             error: function(xhr, status, error){
                 errorHandler(xhr, status, error);
             }
-        })
-    })
+        });
+    });
+
+    // Load Queuing Monitoring 
+    function loadQueuingMonitoring() {
+        $.ajax({
+            url: '/queuing/getQueuingMonitoring',
+            method: 'GET',
+            success: function(clients) {
+                $.each(clients, function(index, client) {
+                    var cashierSection = $(`.cashier-${client.cashier_Id}-section`);
+                    const client_id_pad = String(client.id).padStart(4, "0");
     
-    //update queue servicing information in monitoring
+                    if (cashierSection.length) {
+                        cashierSection.html(`
+                            <div> Cashier: ${client.cashier.name}</div>
+                            <div>ID: ${client_id_pad}</div>
+                            <div>Name: ${client.name}</div>
+                        `);
+                    } else {
+                        $(`#queue-servicing`).append(
+                            `<div class='cashier-${client.cashier_Id}-section'>
+                                <div> Cashier: ${client.cashier_Id}</div>
+                                <div>ID: ${client_id_pad}</div>
+                                <div>Name: ${client.name}</div>
+                            </div>`
+                        );
+                    }
+                });
+            },
+            error: function(error) {
+                console.log('Error fetching queuing monitoring data', error);
+            },
+        });
+    }
+    
+    //loading indicator
+    // beforeSend: function() {
+    //     $(`#queue-servicing`).html(
+    //      `
+    //          <!-- From Uiverse.io by barisdogansutcu --> 
+    //          <svg viewBox="25 25 50 50">
+    //              <circle r="20" cy="50" cx="50"></circle>
+    //          </svg>
+    //      `
+    //     )
+    //  },
+    // complete: function(){
+    //     $(`#queue-servicing svg`).remove();
+        
+    // }
+    loadQueuingMonitoring();
+    //load Queuing Cashier
+    function loadCashierQueuing() {
+        const cashier_id = $('#notifyQueue').data('cashier_id');
+        console.log(cashier_id);
+        $.ajax({
+            url: `/cashier/queuingList/${cashier_id}`,
+            method: 'GET',
+            beforeSend: function() {
+               $(`#cashier-queue-${cashier_id}`).html(
+                `
+                    <!-- From Uiverse.io by barisdogansutcu --> 
+                    <svg viewBox="25 25 50 50">
+                        <circle r="20" cy="50" cx="50"></circle>
+                    </svg>
+                `
+               )
+            },
+            success: function(response) {
+                const client_id = String(response.id);
+                const client_id_pad = client_id.padStart(4, "0");
+                console.log(response);
+                $(`#cashier-queue-${cashier_id}`).html(
+                    `<div>ID: ${client_id_pad}</div>
+                     <div>Name: ${response.name}</div>`
+                );
+            },
+            error: function(error) {
+                // Handle error if the request fails
+                console.log('Request failed', error);
+            }
+        });
+    }
+    
+    loadCashierQueuing();
+
+    $(document).on('click', '#notifyQueue', function(){
+        const url = $(this).data('url');
+        const cashier_id = $(this).data('cashier_id');
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: {cashier_id: cashier_id},
+            success: function(response){
+                console.log(response);
+            },
+            error: function(xhr, status, error){
+                errorHandler(xhr, status, error);
+            }
+        });
+    });
+
+    // Update queue servicing information in monitoring
     if (window.location.pathname === '/queuing/monitoring') {
         if (window.Echo) {
             window.Echo.channel('queuing-monitoring')
-            .listen('Queueing', function(data) { 
-                var msg = `Customer number ${data.id}, please come in Cashier ${data.cashier_id}.`;
-                // Use the Web Speech API to speak the message
-                var speech = new SpeechSynthesisUtterance(msg);
-                window.speechSynthesis.speak(speech);  
+                .listen('Queueing', async function (data) {
+                    console.log(data);
+                    const msgText = `Customer number ${data.id}, ${data.name}, please come to ${data.cashier_name}.`;
+                 
+                    speakText(msgText)
+                        .then(() => console.log('Speech finished'))
+                        .catch((error) => console.error('Speech error:', error));
+
+                    loadQueuingMonitoring();
               
-                var cashierSection = $(`.cashier-${data.cashier_id}-section`);
-                
-                if (cashierSection.length) {
-                    cashierSection.html(`
-                        <div> Cashier: ${data.cashier_id}</div>
-                        <div>ID: ${data.id}</div>
-                        <div>Name: ${data.name}</div>
-                    `);
-                } else {
-                    $(`#queue-servicing`).append(
-                        ` 
-                        <div class='cashier-${data.cashier_id}-section'>
-                          <div> Cashier: ${data.cashier_id}</div>
-                          <div>ID: ${data.id}</div>
-                          <div>Name: ${data.name}</div>
-                        </div>
-                        `
-                    );
-                }
-            });
+                 
+                });
         } else {
             console.error("Echo is not available!");
         }
     }
-    
-
-})
+});

@@ -14,6 +14,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+
         
         {{-- delete selected checkbox --}}
         <form class="mt-3" action="{{ route('clients.delete-selected') }}" method="POST">
@@ -21,10 +22,10 @@
             @method('DELETE')
             <div class="d-flex justify-content-between py-3">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="deleteAll" />
-                    <label class="form-check-label" for="deleteAll">
+                    {{-- <input class="form-check-input" type="checkbox" id="deleteAll" /> --}}
+                    {{-- <label class="form-check-label" for="deleteAll">
                         Select All
-                    </label>
+                    </label> --}}
                 </div>
                 <div class="form-check">
                     <button type="submit" class="btn btn-danger">Delete Selected</button>

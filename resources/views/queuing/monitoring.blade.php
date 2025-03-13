@@ -13,10 +13,10 @@
             <div class="card-header bg-blue-500 text-white text-center py-2 rounded-t-lg">
                 <span class="text-xl font-semibold">Now Servicing</span>
             </div>
-            <div class="card-body" id="queue-servicing">
+            <div class="card-body monitoring-queue" id="queue-servicing">
             
             </div>
-        </div>
+        </div>  
 
         <div id="datetime" class="text-center mt-4 text-lg font-medium text-gray-700"></div>
 

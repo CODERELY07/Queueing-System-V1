@@ -213,7 +213,7 @@ $(document).ready(function(){
     });
 
     // Update queue servicing information in monitoring
-    // if (window.location.pathname === '/queuing/monitoring') {
+    if (window.location.pathname === '/queuing/monitoring') {
        
         if (window.Echo) {
             window.Echo.channel('queuing-monitoring')
@@ -233,5 +233,5 @@ $(document).ready(function(){
         } else {
             console.error("Echo is not available!");
         }
-    // }
+    }
 });

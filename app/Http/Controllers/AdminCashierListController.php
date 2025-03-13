@@ -69,9 +69,8 @@ class AdminCashierListController extends Controller
         if ($request->filled('password')) {
             $updateData['password'] = Hash::make($request->password);
         }
-    
+        
         $cashier->update($updateData);
-    
         return response()->json($cashier);
     }
     

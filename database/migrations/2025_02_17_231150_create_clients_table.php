@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('status')->default('waiting');
             $table->foreign('cashier_id')->references('id')->on('users')->onDelete('set null');
+            $table->boolean('is_called')->default(false);
             $table->timestamps();
         });
     }

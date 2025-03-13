@@ -20,7 +20,6 @@ class AdminUserListController extends Controller
         if ($clientIds) {
             Client::whereIn('id', $clientIds)->delete();
         }
-        
         return redirect()->route('admin.userList')->with('success', 'Clients deleted successfully');
     }
 

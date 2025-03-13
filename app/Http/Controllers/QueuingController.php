@@ -44,10 +44,16 @@ class QueuingController extends Controller
                         ->first();
         
         if ($client) {
+       
             $client->status = 'servicing';
             $client->cashier_id = $request->cashier_id;
+           
+
+            if (!$client->is_called) {
+                broadcast(new Queueing($client));
+                $client->is_called = true;
+            }
             $client->save();
-    
             return response()->json([
                 'client' => [
                     'id' => $client->id,

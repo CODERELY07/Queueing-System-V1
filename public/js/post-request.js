@@ -114,7 +114,18 @@ $(document).ready(function(){
                 password: $("#password").val(),
             },
             success: function(response){
+             
                 displayError(response);
+             
+                if(method == "POST" && !response.errors){
+                    alert('Cashier Added Successfully!');
+                    $('#cashierModalPopUp').modal('hide');
+                    $('#cashierModalPopUp input').val('');
+                }else if(method == "PUT" && !response.errors){
+                    alert('Cashier Updated Succesfully!');
+                    $('#cashierModalPopUp').modal('hide');
+                    $('#cashierModalPopUp input').val('');
+                }
                 loadCashier(); 
             },
             error: function(xhr, status, error){
@@ -151,20 +162,31 @@ $(document).ready(function(){
     }
 
     // Delete cashierList
-    $(document).on('click', '.delete', function(){
+    $(document).on('click', '.delete', function() {
         errorClean();
+        
         let id = $(this).data('id');
-        $.ajax({
-            url: `/admin/cashier-list/${id}`,
-            method: 'DELETE',
-            success: function(){
-                loadCashier();
-            },
-            error: function(xhr, status, error){
-                errorHandler(xhr, status, error);
-            }
-        });
+        
+        let confirmation = confirm("Are you sure you want to delete this cashier?");
+        
+        if (confirmation) {
+          
+            $.ajax({
+                url: `/admin/cashier-list/${id}`,
+                method: 'DELETE',
+                success: function(response) {
+                    loadCashier(); 
+                    alert('Cashier Deleted Successfully!');
+                },
+                error: function(xhr, status, error) {
+                    errorHandler(xhr, status, error); 
+                }
+            });
+        } else {
+            console.log('Deletion canceled');
+        }
     });
+    
 
     // Edit cashierList
     $(document).on('click', '.edit', function(){

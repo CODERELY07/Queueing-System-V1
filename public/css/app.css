@@ -7,10 +7,13 @@
 .row{
     padding: 0 !important;
 }
+.monitoring-queue{
+    font-size: 30px;
+}
 .text-medium{
     font-size: 24px;
 }
-.cashier-queue > div{
+.cashier-queue > div > div{
     font-size: 300%;
     text-align: center;
 }
@@ -213,11 +216,17 @@ svg {
 #transactionData .btn-success:hover {
     background-color: #38b2ac; /* Darker teal on hover */
 }
-
+#queue-servicing{
+    display: flex;
+    gap: 10px;
+}
 /* Responsive padding for small screens */
 @media (max-width: 640px) {
     .container {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+    .cashier-queue > div{
+        font-size: 30px;
     }
 }

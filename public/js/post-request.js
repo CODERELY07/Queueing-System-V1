@@ -61,7 +61,7 @@ $(document).ready(function(){
                     window.location.href = response.redirectUrl;
                 } else {
                     errorClean();
-                    $('.alert').addClass('alert-danger').text(response.error);
+                    displayAlert(response.error);
                 }
             },
             error: function(xhr, status, error){

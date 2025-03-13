@@ -112,16 +112,16 @@ $(document).ready(function(){
     
                     if (cashierSection.length) {
                         cashierSection.html(`
-                            <div> Cashier: ${client.cashier.name}</div>
-                            <div>ID: ${client_id_pad}</div>
-                            <div>Name: ${client.name}</div>
+                            <div class="font-semibold text-2xl"> Cashier: ${client.cashier.name}</div>
+                            <div class="font-semibold text-2xl">ID: ${client_id_pad}</div>
+                            <div class="font-semibold text-2xl">Name: ${client.name}</div>
                         `);
                     } else {
                         $(`#queue-servicing`).append(
-                            `<div class='cashier-${client.cashier_Id}-section'>
-                                <div> Cashier: ${client.cashier_Id}</div>
-                                <div>ID: ${client_id_pad}</div>
-                                <div>Name: ${client.name}</div>
+                            `<div class='cashier-${client.cashier_Id}-section cashier-section'>
+                                <div class="font-semibold text-2xl"> Cashier: ${client.cashier_Id}</div>
+                                <div class="font-semibold text-2xl">ID: ${client_id_pad}</div>
+                                <div class="font-semibold text-2xl">Name: ${client.name}</div>
                             </div>`
                         );
                     }
@@ -148,11 +148,12 @@ $(document).ready(function(){
     //     $(`#queue-servicing svg`).remove();
         
     // }
+    console.log("hi")
     loadQueuingMonitoring();
     //load Queuing Cashier
     function loadCashierQueuing() {
         const cashier_id = $('#notifyQueue').data('cashier_id');
-        console.log(cashier_id);
+       
         $.ajax({
             url: `/cashier/queuingList/${cashier_id}`,
             method: 'GET',
@@ -160,20 +161,30 @@ $(document).ready(function(){
                $(`#cashier-queue-${cashier_id}`).html(
                 `
                     <!-- From Uiverse.io by barisdogansutcu --> 
-                    <svg viewBox="25 25 50 50">
+                    <svg style="margin:0 auto !important; display:block" viewBox="25 25 50 50">
                         <circle r="20" cy="50" cx="50"></circle>
                     </svg>
                 `
                )
             },
             success: function(response) {
-                const client_id = String(response.id);
-                const client_id_pad = client_id.padStart(4, "0");
-                console.log(response);
-                $(`#cashier-queue-${cashier_id}`).html(
-                    `<div>ID: ${client_id_pad}</div>
-                     <div>Name: ${response.name}</div>`
-                );
+                if(response.id){
+                    const client_id = String(response.id);
+                    const client_id_pad = client_id.padStart(4, "0");
+                    console.log(response);
+                    $(`#cashier-queue-${cashier_id}`).html(
+                        `<div class="text-2xl text-center">ID: ${client_id_pad}</div>
+                         <div class="text-2xl text-center">Name: ${response.name}</div>`
+                    );
+                }else{
+                    $(`#cashier-queue-${cashier_id}`).html(
+                        `<div>
+                            <p class="text-center">No Queue</p>
+                            <small class="text-center">Click Next to Start</small>
+                        </div>`
+                    );  
+                }
+             
             },
             error: function(error) {
                 // Handle error if the request fails
@@ -202,11 +213,13 @@ $(document).ready(function(){
     });
 
     // Update queue servicing information in monitoring
-    if (window.location.pathname === '/queuing/monitoring') {
+    // if (window.location.pathname === '/queuing/monitoring') {
+       
         if (window.Echo) {
             window.Echo.channel('queuing-monitoring')
                 .listen('Queueing', async function (data) {
                     console.log(data);
+                    console.log("hi")
                     const msgText = `Customer number ${data.id}, ${data.name}, please come to ${data.cashier_name}.`;
                  
                     speakText(msgText)
@@ -220,5 +233,5 @@ $(document).ready(function(){
         } else {
             console.error("Echo is not available!");
         }
-    }
+    // }
 });

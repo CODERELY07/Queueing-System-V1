@@ -17,7 +17,6 @@ class AuthController extends Controller
     }
 
     public function loginPost(Request $request){
-    
 
         $request->validate([
             'name' => 'required|string',
@@ -29,6 +28,10 @@ class AuthController extends Controller
         // Debugging to view this go to storage/logs/laravel.log
         // Log::debug('Logged-in user details: ', ['user' => $user]);
 
+        if (!$user) {
+            return response()->json(['error' => 'No User Found']); 
+        }
+        
         //check if user is logged in 
         if($user->log_status == 'logged_out'){
             if(Auth::attempt($credentials)){

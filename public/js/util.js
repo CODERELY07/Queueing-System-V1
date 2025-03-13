@@ -2,17 +2,22 @@
 function errorHandler(xhr, status, error){
     $('.errors').html('');
     //for testing 
-    console.log("Error Details: " + status + error + xhr.responseText);
+    // console.log("Error Details: " + status + error + xhr.responseText);
             
     // Display errors
     if (xhr.status === 422) {
         let errors = xhr.responseJSON.errors;
+        $(".errors").html(""); 
+    
         for (let field in errors) {
-           console.log(errors[field]);
+            let errorMessage = errors[field][0]; 
+            $(`#${field}-error`).html(`<span class="text-danger">${errorMessage}</span>`); 
         }
-    } else {
-        $('.errors').text('Something went wrong. Please try again later.');
     }
+    
+    // else {
+    //     $('.errors').text('Something went wrong. Please try again later.');
+    // }
 }
 function displayError(response){
     // response = response.responseJSON.errors;
@@ -76,10 +81,24 @@ $(document).ready(function(){
     $(document).on('click',".show-modal", function(){
         const target = $(this).data('target');
         $("#cashier_id").val('');
-       $(target).modal('show');
+        $(target).modal('show');
     });
     $(document).on('click',".close-modal", function(){
        errorClean();
        $('.inputs').val('');
     });
 })
+
+function displayAlert(message, type = 'alert-danger') {
+    let alertBox = $('.alert');
+
+    alertBox
+        .removeClass('alert-danger alert-success') 
+        .addClass(type) // Add the new alert type
+        .text(message) // Set the message
+        .fadeIn(300) // Smoothly fade in
+        .delay(3000) // Keep visible for 3 seconds
+        .fadeOut(300, function() {
+            $(this).text(''); // Clear text after fading out
+        });
+}

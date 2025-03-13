@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\QueuingController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +32,7 @@ Route::controller(QueuingController::class)->group(function(){
 });
 
 Route::get('/cashier/queuingList/{cashier_id}', [CashierController::class, 'getCashierQueuing']);
+
 
 
 require __DIR__.'/auth.php';

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminUserListController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminCashierListController;
 use App\Http\Controllers\AuthController;
@@ -31,13 +33,22 @@ Route::middleware('auth')->group(function() {
 
 // admin
 Route::middleware(['auth', 'role:admin'])->group(function(){
+    // admin home
     Route::get('/admin', [AdminCashierListController::class, 'index'])->name('admin.index');
+
+       //Admin User List
+    Route::controller(AdminUserListController::class)->group(function(){
+        Route::get('/admin/user-list-view', 'index')->name('admin.userList');
+        Route::delete('admin/clients/delete-selected',  'deleteSelected')->name('clients.delete-selected');
+        Route::put('admin/clients/update',  'update')->name('clients.update');
+    });
 
     // Admin CashierListCrud
     // view cashier
     Route::get('/admin/cashier-list-view', function () {
         return view('admin.cashier-list'); 
     })->name('admin.cashierList');
+
     // fetch cashierList
     Route::get('/admin/cashier-list', [AdminCashierListController::class, 'cashierList']);
     //create new cashier

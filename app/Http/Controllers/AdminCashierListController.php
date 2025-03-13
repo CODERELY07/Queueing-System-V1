@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
@@ -13,7 +14,10 @@ class AdminCashierListController extends Controller
 {
     // admin home
     public function index(){
-        return view('admin.index');
+        $cashiers = User::where('status', 'logged_in')->count();
+        $pendingClients = Client::where('status', 'waiting')->count();
+        $allClients = Client::all()->count();
+        return view('admin.index', ['cashiers' => $cashiers, 'pendingClients' => $pendingClients, 'allClients' => $allClients]);
     }
     //creaete Cashier 
     public function store(Request $request)

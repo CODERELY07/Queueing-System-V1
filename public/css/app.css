@@ -1,13 +1,36 @@
 *,
 *::before,
 *::after{
-    padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+.row{
+    padding: 0 !important;
 }
 .text-medium{
     font-size: 24px;
 }
+.cashier-queue > div{
+    font-size: 300%;
+    text-align: center;
+}
+input:focus, 
+textarea:focus, 
+select:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #ccc; 
+}
+
+#loginForm{
+    margin-top: 30px;
+    width: 95% !important;
+    max-width: 400px;
+}
+.alert{
+    display: none;
+}
+
 .center-vh-100 {
     background-color: #f8f9fa;
     color: #343a40;
@@ -85,4 +108,116 @@ svg {
      stroke-dashoffset: -125px;
     }
    }
-   
+   .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    color: #007bff;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.pagination .page-link:hover {
+    background-color: #f8f9fa;
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+}
+
+/* Queing monitoring */
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: center;
+    background-color: #3b82f6; /* Blue background */
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-body .cashier-section {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f3f4f6; /* Light Gray */
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-body .cashier-section:hover {
+    background-color: #e5e7eb; /* Hover Effect */
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+.box{
+    width: 100%;
+    height: 200px;
+    max-width: 300px;
+}
+.mt-4 {
+    margin-top: 1rem;
+}
+/* Client */
+/* Tailwind utility classes for responsiveness and interactivity */
+
+/* Add hover effect to input field for better UX */
+.form-control:hover {
+    border-color: #3b82f6; /* Blue on hover */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Print Button */
+#transactionData .btn-success:hover {
+    background-color: #38b2ac; /* Darker teal on hover */
+}
+
+/* Responsive padding for small screens */
+@media (max-width: 640px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}

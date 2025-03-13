@@ -48,8 +48,6 @@ class QueuingController extends Controller
             $client->cashier_id = $request->cashier_id;
             $client->save();
     
-            broadcast(new Queueing($client));
-    
             return response()->json([
                 'client' => [
                     'id' => $client->id,
@@ -83,7 +81,7 @@ class QueuingController extends Controller
             $previousClient->status = 'servicing';
             $previousClient->save();
 
-            broadcast(new Queueing($previousClient));
+            // broadcast(new Queueing($previousClient));
             return response()->json([
                 'client' => [
                     'id' => $previousClient->id,

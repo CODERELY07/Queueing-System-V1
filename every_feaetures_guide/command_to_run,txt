@@ -2,6 +2,9 @@ When first time or reset the migration
 php artisan migrate
 php artisan db:seed --class=AdminSeeder
 
+install this for image
+composer require intervention/image
+
 When setup is complete
 php artisan queue:listen
 php artisan reverb:start --debug
